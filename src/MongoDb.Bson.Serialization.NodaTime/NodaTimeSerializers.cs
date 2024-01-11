@@ -4,7 +4,7 @@ using Duration = NodaTime.Duration;
 
 namespace MongoDb.Bson.Serialization.NodaTime;
 
-public static class NodaTimeSerializer
+public static class NodaTimeSerializers
 {
     public static void RegisterNodaTimeBsonSerializers()
     {
@@ -22,6 +22,6 @@ public static class NodaTimeSerializer
         RegisterSerializer(typeof(OffsetTime), new OffsetTimeSerializer());
         RegisterSerializer(typeof(Period), new PeriodSerializer());
         RegisterSerializer(typeof(YearMonth), new YearMonthSerializer());
-//        RegisterSerializer(typeof(ZonedDateTime), new ZonedDateTimeSerializer());
+        RegisterSerializer(typeof(ZonedDateTime), new ZonedDateTimeSerializer());
     }
 }
