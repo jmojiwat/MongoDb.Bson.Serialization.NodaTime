@@ -1,26 +1,15 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using NodaTime;
+using NodaTime.Text;
 
 namespace MongoDb.Bson.Serialization.NodaTime;
 
 public class AnnualDateSerializer : SerializerBase<AnnualDate>
 {
-    public override AnnualDate Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
-    {
-        context.Reader.ReadStartArray();
-        var month = context.Reader.ReadInt32();
-        var day = context.Reader.ReadInt32();
-        context.Reader.ReadEndArray();
+    public override AnnualDate Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args) => 
+        AnnualDatePattern.Iso.Parse(context.Reader.ReadString()).Value;
 
-        return new AnnualDate(month, day);
-    }
-
-    public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, AnnualDate value)
-    {
-        context.Writer.WriteStartArray();
-        context.Writer.WriteInt32(value.Month);
-        context.Writer.WriteInt32(value.Day);
-        context.Writer.WriteEndArray();
-    }
+    public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, AnnualDate value) => 
+        context.Writer.WriteString(AnnualDatePattern.Iso.Format(value));
 }
